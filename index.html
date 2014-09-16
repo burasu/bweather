@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Aplicación de tiempo en webapp" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"/>
+    <title>bWeather</title>
+
+    <link rel="stylesheet" href="css/normalize.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+    <header>
+        <h1>bWeather <small>by burasu</small></h1>
+    </header>
+    <section>
+        <div id="clima"></div>
+        <div id="city"></div>
+        <h3>El Puerto de Santa María</h3>
+        <article>
+            <figure id="current_weather">
+                Cloudy
+                <figcaption>24º</figcaption>
+            </figure>
+        </article>
+    </section>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="js/geoweather.js"></script>
+    <script>
+        $(function() {
+            var geo = navigator.geolocation;
+
+            function geo_exito(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                obtenerGeoPosicion(lat, lon);
+            }
+
+            function geo_error() {
+                console.log("Hhhmmm... esto es incómodo, no se donde estás.");
+            }
+
+            geo.getCurrentPosition(geo_exito, geo_error, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
+        });
+    </script>
+</body>
+</html>

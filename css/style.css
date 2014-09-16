@@ -1,0 +1,30 @@
+body {
+    background: #6699cc;
+    color: white;
+    font-size: 18px;
+}
+
+header {
+    text-align: center;
+    width: 100%;
+}
+
+header h1 {
+    font-size: 1em;
+    font-weight: lighter;
+}
+
+header h1 small {
+    font-size: .5em;    /* Corresponde a los 36px aprox. del titulo h1 */
+}
+
+section {
+    outline: 1px solid red;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+section #city {
+    font-size: 1.333em;
+    text-align: center;
+}
