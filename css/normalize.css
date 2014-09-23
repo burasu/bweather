@@ -6,10 +6,10 @@
  *    user zoom.
  */
 /* Importamos la fuente desde google fonts */
-@import url(http://fonts.googleapis.com/css?family=Nunito:300,400);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300);
 
 html {
-    font-family: 'Nunito', sans-serif; /* 1 */
+    font-family: 'Open Sans', sans-serif; /* 1 */
     -ms-text-size-adjust: 100%; /* 2 */
     -webkit-text-size-adjust: 100%; /* 2 */
 }

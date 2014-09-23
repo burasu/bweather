@@ -2,53 +2,38 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="description" content="Aplicación de tiempo en webapp" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"/>
-    <title>bWeather</title>
+    <meta name="description" content="Aplicación de tiempo en HTML5, CSS3 y Javascript" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <title>bWeather by Blas Fernández</title>
 
-    <link rel="stylesheet" href="css/normalize.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/responsive.css"/>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
     <header>
-        <h1>bWeather <small>by burasu</small></h1>
+        <h1>bWeather <small>by Blas Fernández</small></h1>
+        <h2><i class="fa fa-map-marker"></i> <span class="location"></span></h2>
     </header>
+
+    <div id="weather">
+        <!-- Aqui incluiremos la medición del tiempo -->
+    </div>
+
+
+
     <section>
-        <div id="clima"></div>
         <div id="city"></div>
         <h3>El Puerto de Santa María</h3>
         <article>
-            <figure id="current_weather">
-                Cloudy
-                <figcaption>24º</figcaption>
-            </figure>
+            <div id="clima"></div>
+            <div id="temp"></div>
+            <p>24º</p>
         </article>
     </section>
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="js/geoweather.js"></script>
-    <script>
-        $(function() {
-            var geo = navigator.geolocation;
+    <script src="js/bweather.js"></script>
 
-            function geo_exito(position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
-
-                obtenerGeoPosicion(lat, lon);
-            }
-
-            function geo_error() {
-                console.log("Hhhmmm... esto es incómodo, no se donde estás.");
-            }
-
-            geo.getCurrentPosition(geo_exito, geo_error, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
-        });
-    </script>
 </body>
 </html>
