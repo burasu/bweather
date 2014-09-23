@@ -45,6 +45,11 @@ header h2 {
     font-size: 17.02rem;
 }
 
+#temperature {
+    font-size: 4.75rem;
+    text-align: center;
+}
+
 section {
     outline: 1px solid red;
     margin-left: 15%;

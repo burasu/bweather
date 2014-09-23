@@ -124,9 +124,19 @@ function weatherCallback(data)
     console.log(weather.item.condition.code);
     console.log(temp);
 
-    var markup = '<i class="climacon ' + weatherIcon[code] + '"></i>'+
-        ' <p class="day">' + temp + '</p> <p class="cond">condition</p>';
+    var markup = '<i class="climacon ' + weatherIcon[code] + '"></i>';
+
+    var deg;
+
+    if (DEG == 'c')
+    {
+        deg = '<i class="climacon celcius"></i>';
+    }
+    else
+    {
+        deg = '<i class="climacon farenheit"></i>';
+    }
 
     $('#clima').append(markup);
-
+    $('#temperature').append('<i class="climacon thermometer medium-high"></i> ' + temp + ' ' + deg );
 }
