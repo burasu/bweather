@@ -9,26 +9,27 @@
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/climacon.css"/>
 </head>
 <body>
     <header>
         <h1>bWeather <small>by Blas Fernández</small></h1>
-        <h2><i class="fa fa-map-marker"></i> <span class="location"></span></h2>
+        <h2>
+            <i class="fa fa-map-marker"></i> <span class="location"></span>
+        </h2>
     </header>
 
-    <div id="weather">
-        <!-- Aqui incluiremos la medición del tiempo -->
-    </div>
-
-
-
-    <section>
-        <div id="city"></div>
-        <h3>El Puerto de Santa María</h3>
+    <section id="weather">
         <article>
             <div id="clima"></div>
             <div id="temperature"></div>
         </article>
+    </section>
+
+    <section id="post">
+        <ul>
+            <li>23ºC</li>
+        </ul>
     </section>
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>

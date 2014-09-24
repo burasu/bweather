@@ -27,7 +27,6 @@ $(function()
     }
     else
     {
-//        showError("Your browser does not support Geolocation!");
         console.log('No se admite geolocalización');
     }
 
@@ -123,6 +122,12 @@ function weatherCallback(data)
     console.log(weather);
     console.log(weather.item.condition.code);
     console.log(temp);
+
+    console.log(weather.item.forecast[0]);
+    console.log(weather.item.forecast[1]);
+    console.log(weather.item.forecast[2]);
+    console.log(weather.item.forecast[3]);
+    console.log(weather.item.forecast[4]);
 
     var markup = '<i class="climacon ' + weatherIcon[code] + '"></i>';
 
