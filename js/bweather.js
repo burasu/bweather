@@ -123,12 +123,6 @@ function weatherCallback(data)
     console.log(weather.item.condition.code);
     console.log(temp);
 
-    console.log(weather.item.forecast[0]);
-    console.log(weather.item.forecast[1]);
-    console.log(weather.item.forecast[2]);
-    console.log(weather.item.forecast[3]);
-    console.log(weather.item.forecast[4]);
-
     var markup = '<i class="climacon ' + weatherIcon[code] + '"></i>';
 
     var deg;
@@ -144,4 +138,43 @@ function weatherCallback(data)
 
     $('#clima').append(markup);
     $('#temperature').append('<i class="climacon thermometer medium-high"></i> ' + temp + ' ' + deg );
+
+
+    // Procedemos a tramitar el estilo del forecast. Se descarta el indice 0 ya que es el del tiempo actual.
+    var forecast = '<ul>'
+    forecast += weatherForecast(weather.item.forecast[1]);
+    forecast += weatherForecast(weather.item.forecast[2]);
+    forecast += weatherForecast(weather.item.forecast[3]);
+    forecast += weatherForecast(weather.item.forecast[4]);
+    forecast += '</ul>';
+
+
+    $('#forecast').append(forecast);
+}
+
+function weatherForecast(data)
+{
+    var day = data.day;
+    var weather = '<i class="climacon ' + weatherIcon[data.code] + '"></i>';
+    var min = data.low;
+    var max = data.high;
+
+    var deg;
+
+    if (DEG == 'c')
+    {
+        deg = '<i class="climacon celcius"></i>';
+    }
+    else
+    {
+        deg = '<i class="climacon farenheit"></i>';
+    }
+
+    var markup = '<li class="next_day">';
+    markup += '<p class="forecast_day">' + day + '</p>';
+    markup += weather;
+    markup += '<p><i class="climacon thermometer medium-high"></i> ' + min + ' / ' + max + deg + '</p>';
+    markup += '</li>';
+
+    return markup;
 }

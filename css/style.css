@@ -48,13 +48,16 @@ header h2 {
     text-align: center;
 }
 
-section {
-    position: top;
-    margin-left: 15%;
-    margin-right: 15%;
+#forecast {
+    background: #e6e6e4;
+    border-top: 1px solid #a9a9a8;
+    width: 100%;
 }
 
-section #city {
-    font-size: 1.333em;
-    text-align: center;
+#forecast ul {
+    display: inline-block;
+}
+
+.forecast_day {
+    text-transform: uppercase;
 }
