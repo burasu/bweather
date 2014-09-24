@@ -155,7 +155,7 @@ function weatherCallback(data)
 function weatherForecast(data)
 {
     var day = data.day;
-    var weather = '<i class="climacon ' + weatherIcon[data.code] + '"></i>';
+    var weather = '<div class="forecast_icon climacon ' + weatherIcon[data.code] + '"></div>';
     var min = data.low;
     var max = data.high;
 
@@ -171,9 +171,9 @@ function weatherForecast(data)
     }
 
     var markup = '<li class="next_day">';
-    markup += '<p class="forecast_day">' + day + '</p>';
+    markup += '<div class="forecast_day">' + day + '</div>';
     markup += weather;
-    markup += '<p><i class="climacon thermometer medium-high"></i> ' + min + ' / ' + max + deg + '</p>';
+    markup += '<div class="forecast_temp"><i class="climacon thermometer medium-high"></i> ' + min + ' / ' + max + deg + '</div>';
     markup += '</li>';
 
     return markup;

@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    background: white;
+    background: #e6e6e4;
     color: #535353;
     font-size: 16px;
 }
@@ -30,7 +30,8 @@ header h2 {
 }
 
 #weather {
-    padding: 6rem 0;
+    background: white;
+    padding: 6rem 0 1.5rem 0;
 }
 
 #clima {
@@ -41,6 +42,7 @@ header h2 {
 #clima i {
     color: #3B8686;
     font-size: 8.125rem;
+    text-shadow: rgba(0, 0, 0, .3) 3px 3px;
 }
 
 #temperature {
@@ -50,14 +52,33 @@ header h2 {
 
 #forecast {
     background: #e6e6e4;
+    border-bottom: 1px solid #a9a9a8;
     border-top: 1px solid #a9a9a8;
+    text-align: center;
     width: 100%;
 }
 
 #forecast ul {
-    display: inline-block;
+    margin: 0;
+    padding: 0;
 }
 
 .forecast_day {
     text-transform: uppercase;
 }
+
+.next_day {
+    border-left: 1px solid #535353;
+    display: inline-block;
+    margin-left: 0;
+    width: 24%;
+}
+
+.next_day:first-child {
+    border: 0;
+}
+
+.next_day .forecast_icon {
+    font-size: 4rem;
+}
+
