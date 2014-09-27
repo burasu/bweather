@@ -14,4 +14,4 @@ Font Awesome 4.2.0 by [@fontawesome](https://twitter.com/fontawesome).
 
 ## DEMO
 
-[Demo](http://blasfernandez.es/proyectos/bweather/).
+[Demo](http://bweather.herokuapp.com/).
