@@ -19,6 +19,7 @@ $(function()
     // En primer lugar vamos a determinar si podemos localizar el dispositivo.
     if (geo)
     {
+        console.log('Se admite geolocalización. Obtenemos los datos por GPS.')
         geo.getCurrentPosition(locationSuccess, locationError, {
             enableHighAccuracy: true,
             timeout: 5000,
@@ -27,15 +28,44 @@ $(function()
     }
     else
     {
-        console.log('No se admite geolocalización');
+        console.log('No se admite geolocalización, intentamos obtener datos por la IP.');
+
+        $.ajax({
+            url: 'http://freegeoip.net/json/',
+            type: 'POST',
+            dataType: 'jsonp',
+            success: function(location)
+            {
+                var coords = [];
+
+                coords['longitude'] = location.longitude;
+                coords['latitude']  = location.latitude;
+                console.log(coords);
+
+                locationSuccess(coords);
+            }
+        });
     }
 
 
     // Si hubo exito en detectar la posición del usuario y el pronostico.
     function locationSuccess(position)
     {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
+        var lat;
+        var lon;
+
+        if (Array.isArray(position))
+        {
+            console.log('Es un array');
+            lat = position['latitude'];
+            lon = position['longitude'];
+        }
+        else
+        {
+            console.log('No es un array');
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+        }
 
         console.log('Hemos obtenido las coordenadas');
         console.log(lat);
