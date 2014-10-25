@@ -58,7 +58,7 @@ function locationError (err)
             console.log('DEBUG: No se ha podidio acceder a la información de su posición. Se busca por IP.');
             IPGeo();
         break;
-        case erro.TIMEOUT:
+        case err.TIMEOUT:
             console.log('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
             IPGeo();
         break;
