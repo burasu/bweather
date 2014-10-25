@@ -12,21 +12,28 @@
     <link rel="stylesheet" href="css/climacon.css"/>
 </head>
 <body>
-    <header>
-        <h1>bWeather <small>by Blas Fernández</small></h1>
-        <h2>
-            <i class="fa fa-map-marker"></i> <span class="location"></span>
-        </h2>
-    </header>
 
-    <section id="weather">
-        <article>
-            <div id="clima"></div>
-            <div id="temperature"></div>
-        </article>
-    </section>
+    <div id="loading">
+        <img id="loading-image" src="images/loading.gif" alt="Loading..." />
+    </div>
 
-    <section id="forecast"></section>
+    <div id="app" style="display: none">
+        <header>
+            <h1>bWeather <small><a href="http://blasfernandez.es" target="_blank">by Blas Fernández</a></small></h1>
+            <h2>
+                <i class="fa fa-map-marker"></i> <span class="location"></span>
+            </h2>
+        </header>
+
+        <section id="weather">
+            <article>
+                <div id="clima"></div>
+                <div id="temperature"></div>
+            </article>
+        </section>
+
+        <section id="forecast"></section>
+    </div>
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="js/bweather.js"></script>

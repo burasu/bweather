@@ -11,96 +11,115 @@ var weatherIcon = [
     'snowflake', 'snowflake', 'snowflake', 'cloud', 'rain', 'snow', 'lightning'
 ];
 
-$(function()
-{
-    // Configuración básica.
+
+$().ready(function () {
+
+    console.log('DEBUG: Inicio de las nuevas funciones de geolocalización');
+
+    // capturamos el objeto navigator.geolocation en una variable.
     var geo = navigator.geolocation;
 
-    // En primer lugar vamos a determinar si podemos localizar el dispositivo.
     if (geo)
     {
-        console.log('Se admite geolocalización. Obtenemos los datos por GPS.')
+        console.log('DEBUG: El navegador tiene soporte de la API de geolocalización.');
+
         geo.getCurrentPosition(locationSuccess, locationError, {
             enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
+            timeout: 15000,
+            maximumAge: 75000
         });
     }
     else
     {
-        console.log('No se admite geolocalización, intentamos obtener datos por la IP.');
+        console.log('DEBUG: El navegador no tiene soporte de la API de geolocalización.');
 
-        $.ajax({
-            url: 'http://freegeoip.net/json/',
-            type: 'POST',
-            dataType: 'jsonp',
-            success: function(location)
-            {
-                var coords = [];
-
-                coords['longitude'] = location.longitude;
-                coords['latitude']  = location.latitude;
-                console.log(coords);
-
-                locationSuccess(coords);
-            }
-        });
+        // Lanzamos la función de geoposición por IP.
+        IPGeo();
     }
 
-
-    // Si hubo exito en detectar la posición del usuario y el pronostico.
-    function locationSuccess(position)
-    {
-        var lat;
-        var lon;
-
-        if (Array.isArray(position))
-        {
-            console.log('Es un array');
-            lat = position['latitude'];
-            lon = position['longitude'];
-        }
-        else
-        {
-            console.log('No es un array');
-            lat = position.coords.latitude;
-            lon = position.coords.longitude;
-        }
-
-        console.log('Hemos obtenido las coordenadas');
-        console.log(lat);
-        console.log(lon);
-
-        var query = "SELECT * FROM geo.placefinder WHERE text='" + lat + "," + lon + "' AND gflags='R' ";
-        console.log(query);
-        query = encodeURIComponent(query);
-
-        console.log(BASE_URL + "q=" + query);
-
-        var opciones = {
-            url: BASE_URL + "q=" + query,
-            dataType: 'jsonp',
-            jsonpCallback: 'locationCallback',
-            data: {
-                format : 'json'
-            }
-        }
-
-        $.ajax(opciones);
-    }
-
-
-    // Si hubo algún error.
-    function locationError()
-    {
-        console.log('Hubo un error al generar la geoposicion')
-        $('span.location').html('No disponible');
-
-    }
 
 });
 
-// Función con la que tratamos los datos de la localización que hemos recibido
+
+/*
+    Función con la que gestionamos si la localización tuvo algún tipo de error.
+ */
+function locationError (err)
+{
+    console.log('DEBUG: No se pudo obtener la posicion. Devolvió un código de error: ' + err.code);
+
+    switch (err.code)
+    {
+        case err.PERMISSION_DENIED:
+            console.log('DEBUG: No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
+            IPGeo();
+        break;
+        case err.POSITION_UNAVAILABLE:
+            console.log('DEBUG: No se ha podidio acceder a la información de su posición. Se busca por IP.');
+            IPGeo();
+        break;
+        case erro.TIMEOUT:
+            console.log('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
+            IPGeo();
+        break;
+        default:
+            console.log('DEBUG: Error no controlado. Se manda excepción y no mostramos el tiempo.');
+            $('span.location').html('No disponible');
+            $('#app').fadeIn(2000);
+            $('#loading').hide();
+        break;
+    }
+
+}
+
+/*
+    Si se tuvo exito y tenemos las coordenadas, mostramos el pronóstico.
+ */
+function locationSuccess(position)
+{
+    var lat;
+    var lon;
+
+    if (Array.isArray(position))
+    {
+        console.log('Es un array');
+        lat = position['latitude'];
+        lon = position['longitude'];
+    }
+    else
+    {
+        console.log('No es un array');
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+    }
+
+    console.log('Hemos obtenido las coordenadas');
+    console.log(lat);
+    console.log(lon);
+
+    var query = "SELECT * FROM geo.placefinder WHERE text='" + lat + "," + lon + "' AND gflags='R' ";
+    console.log(query);
+    query = encodeURIComponent(query);
+
+    console.log(BASE_URL + "q=" + query);
+
+    var opciones = {
+        url: BASE_URL + "q=" + query,
+        dataType: 'jsonp',
+        jsonpCallback: 'locationCallback',
+        data: {
+            format : 'json'
+        }
+    }
+
+    $.ajax(opciones);
+}
+
+
+
+/*
+    Callback que devuelve los datos de la localidad en la que se ubica el usuario.
+ */
 function locationCallback(position)
 {
     var data      = position.query.results.Result;
@@ -119,7 +138,9 @@ function locationCallback(position)
 }
 
 
-// Función con la que extraemos los datos del tiempo según la geoposición.
+/*
+    Obtenemos la predicción del tiempo a partir de la ID de la localidad.
+ */
 function getWeather(woeid)
 {
     var query = "SELECT * FROM weather.forecast WHERE woeid='" + woeid + "'";
@@ -139,7 +160,9 @@ function getWeather(woeid)
 }
 
 
-// Funcion con la que tramitamos los valores recibidos y pintamos las etiquetas.
+/*
+    Método que pinta en pantalla la predicción establecida.
+ */
 function weatherCallback(data)
 {
     console.log(data);
@@ -206,5 +229,31 @@ function weatherForecast(data)
     markup += '<div class="forecast_temp"><i class="climacon thermometer medium-high"></i> ' + min + ' / ' + max + deg + '</div>';
     markup += '</li>';
 
+    $('#app').fadeIn(2000);
+    $('#loading').hide();
+
     return markup;
+}
+
+/*
+    Función que ataca a la API de freegeoip.net y obtenemos la posición a partir de la IP
+    facilitada por el dispositivo.
+ */
+function IPGeo()
+{
+    console.log('DEBUG: Obtenemos la posición por IP.');
+    $.ajax({
+        url: '//freegeoip.net/json/',
+        type: 'POST',
+        dataType: 'jsonp',
+        success: function(location) {
+            var coords = [];
+
+            coords['longitude'] = location.longitude;
+            coords['latitude']  = location.latitude;
+            console.log(coords);
+
+            locationSuccess(coords);
+        }
+    });
 }
