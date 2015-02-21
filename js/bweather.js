@@ -19,7 +19,7 @@ $().ready(function () {
     // capturamos el objeto navigator.geolocation en una variable.
     var geo = navigator.geolocation;
 
-    if (geo)
+    if ( ! geo)
     {
         console.log('DEBUG: El navegador tiene soporte de la API de geolocalización.');
 
@@ -34,7 +34,7 @@ $().ready(function () {
         console.log('DEBUG: El navegador no tiene soporte de la API de geolocalización.');
 
         // Lanzamos la función de geoposición por IP.
-        IPGeo();
+        ipGeo();
     }
 
 
@@ -233,27 +233,4 @@ function weatherForecast(data)
     $('#loading').hide();
 
     return markup;
-}
-
-/*
-    Función que ataca a la API de freegeoip.net y obtenemos la posición a partir de la IP
-    facilitada por el dispositivo.
- */
-function IPGeo()
-{
-    console.log('DEBUG: Obtenemos la posición por IP.');
-    $.ajax({
-        url: '//freegeoip.net/json/',
-        type: 'POST',
-        dataType: 'jsonp',
-        success: function(location) {
-            var coords = [];
-
-            coords['longitude'] = location.longitude;
-            coords['latitude']  = location.latitude;
-            console.log(coords);
-
-            locationSuccess(coords);
-        }
-    });
 }
