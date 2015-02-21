@@ -14,6 +14,11 @@ var weatherIcon = [
 
 $().ready(function () {
 
+    bGeoLocation(1);
+
+
+
+
     // capturamos el objeto navigator.geolocation en una variable.
     var geo = navigator.geolocation;
 
