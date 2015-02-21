@@ -14,12 +14,10 @@ var weatherIcon = [
 
 $().ready(function () {
 
-    console.log('DEBUG: Inicio de las nuevas funciones de geolocalización');
-
     // capturamos el objeto navigator.geolocation en una variable.
     var geo = navigator.geolocation;
 
-    if ( ! geo)
+    if (geo)
     {
         console.log('DEBUG: El navegador tiene soporte de la API de geolocalización.');
 
@@ -52,15 +50,15 @@ function locationError (err)
     {
         case err.PERMISSION_DENIED:
             console.log('DEBUG: No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
-            IPGeo();
+            ipGeo();
         break;
         case err.POSITION_UNAVAILABLE:
             console.log('DEBUG: No se ha podidio acceder a la información de su posición. Se busca por IP.');
-            IPGeo();
+            ipGeo();
         break;
         case err.TIMEOUT:
             console.log('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
-            IPGeo();
+            ipGeo();
         break;
         default:
             console.log('DEBUG: Error no controlado. Se manda excepción y no mostramos el tiempo.');
@@ -80,15 +78,20 @@ function locationSuccess(position)
     var lat;
     var lon;
 
-    if (Array.isArray(position))
+    // Este es el objeto de geoposición que habremos recibido.
+    console.log(position);
+
+    // Si entramos por la API de freegeoip, no tenemos definido coords.
+    if ( ! position.coords)
     {
-        console.log('Es un array');
+        console.log('FREEGEOAPI');
+
         lat = position['latitude'];
         lon = position['longitude'];
     }
     else
     {
-        console.log('No es un array');
+        console.log('GEOAPI');
         lat = position.coords.latitude;
         lon = position.coords.longitude;
     }

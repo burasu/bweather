@@ -9,11 +9,11 @@ function ipGeo ()
 {
     console.log('-- HACEMOS USO DE LA IP --');
     $.ajax({
-        url: '//freegeoip.net/json',
+        url: '//freegeoip.net/json/',
         type: 'POST',
         dataType: 'jsonp',
         async: false,
-        success: function(data) {
+        success: function (data) {
 
             /**
              * nos devolverá un objeto, y sus propiedades son:
@@ -29,7 +29,6 @@ function ipGeo ()
              * longitude
              * metro_code
              */
-            console.log(data);
 
             // Aqui se debe llamar a tu función de validación que hará lo que sea
             // con esos datos.
