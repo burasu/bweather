@@ -14,63 +14,10 @@ var weatherIcon = [
 
 $().ready(function () {
 
-    console.log('DEBUG: Inicio de las nuevas funciones de geolocalización');
-
-    // capturamos el objeto navigator.geolocation en una variable.
-    var geo = navigator.geolocation;
-
-    if ( ! geo)
-    {
-        console.log('DEBUG: El navegador tiene soporte de la API de geolocalización.');
-
-        geo.getCurrentPosition(locationSuccess, locationError, {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 75000
-        });
-    }
-    else
-    {
-        console.log('DEBUG: El navegador no tiene soporte de la API de geolocalización.');
-
-        // Lanzamos la función de geoposición por IP.
-        ipGeo();
-    }
-
+    bGeoposition(true);
 
 });
 
-
-/*
-    Función con la que gestionamos si la localización tuvo algún tipo de error.
- */
-function locationError (err)
-{
-    console.log('DEBUG: No se pudo obtener la posicion. Devolvió un código de error: ' + err.code);
-
-    switch (err.code)
-    {
-        case err.PERMISSION_DENIED:
-            console.log('DEBUG: No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
-            IPGeo();
-        break;
-        case err.POSITION_UNAVAILABLE:
-            console.log('DEBUG: No se ha podidio acceder a la información de su posición. Se busca por IP.');
-            IPGeo();
-        break;
-        case err.TIMEOUT:
-            console.log('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
-            IPGeo();
-        break;
-        default:
-            console.log('DEBUG: Error no controlado. Se manda excepción y no mostramos el tiempo.');
-            $('span.location').html('No disponible');
-            $('#app').fadeIn(2000);
-            $('#loading').hide();
-        break;
-    }
-
-}
 
 /*
     Si se tuvo exito y tenemos las coordenadas, mostramos el pronóstico.
