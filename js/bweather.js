@@ -14,10 +14,7 @@ var weatherIcon = [
 
 $().ready(function () {
 
-    bGeoLocation(1);
-
-
-
+    console.log('DEBUG: Inicio de las nuevas funciones de geolocalización');
 
     // capturamos el objeto navigator.geolocation en una variable.
     var geo = navigator.geolocation;
@@ -37,7 +34,7 @@ $().ready(function () {
         console.log('DEBUG: El navegador no tiene soporte de la API de geolocalización.');
 
         // Lanzamos la función de geoposición por IP.
-        ipGeo();
+        IPGeo();
     }
 
 
@@ -55,15 +52,15 @@ function locationError (err)
     {
         case err.PERMISSION_DENIED:
             console.log('DEBUG: No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
-            ipGeo();
+            IPGeo();
         break;
         case err.POSITION_UNAVAILABLE:
             console.log('DEBUG: No se ha podidio acceder a la información de su posición. Se busca por IP.');
-            ipGeo();
+            IPGeo();
         break;
         case err.TIMEOUT:
             console.log('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
-            ipGeo();
+            IPGeo();
         break;
         default:
             console.log('DEBUG: Error no controlado. Se manda excepción y no mostramos el tiempo.');
@@ -83,20 +80,15 @@ function locationSuccess(position)
     var lat;
     var lon;
 
-    // Este es el objeto de geoposición que habremos recibido.
-    console.log(position);
-
-    // Si entramos por la API de freegeoip, no tenemos definido coords.
-    if ( ! position.coords)
+    if (Array.isArray(position))
     {
-        console.log('FREEGEOAPI');
-
+        console.log('Es un array');
         lat = position['latitude'];
         lon = position['longitude'];
     }
     else
     {
-        console.log('GEOAPI');
+        console.log('No es un array');
         lat = position.coords.latitude;
         lon = position.coords.longitude;
     }
@@ -241,4 +233,27 @@ function weatherForecast(data)
     $('#loading').hide();
 
     return markup;
+}
+
+/*
+    Función que ataca a la API de freegeoip.net y obtenemos la posición a partir de la IP
+    facilitada por el dispositivo.
+ */
+function IPGeo()
+{
+    console.log('DEBUG: Obtenemos la posición por IP.');
+    $.ajax({
+        url: '//freegeoip.net/json/',
+        type: 'POST',
+        dataType: 'jsonp',
+        success: function(location) {
+            var coords = [];
+
+            coords['longitude'] = location.longitude;
+            coords['latitude']  = location.latitude;
+            console.log(coords);
+
+            locationSuccess(coords);
+        }
+    });
 }
