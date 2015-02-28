@@ -14,7 +14,8 @@ var weatherIcon = [
 
 $().ready(function () {
 
-    bGeoposition(true);
+    var html5Options = { enableHighAccuracy: true, timeout: 6000, maximumAge: 0 };
+    geolocator.locate(locationSuccess, locationError, true, html5Options, 'map-canvas');
 
 });
 
@@ -24,14 +25,15 @@ $().ready(function () {
  */
 function locationSuccess(position)
 {
+    console.log(position);
     var lat;
     var lon;
 
-    if (Array.isArray(position))
+    if ( ! position.coords)
     {
         console.log('Es un array');
-        lat = position['latitude'];
-        lon = position['longitude'];
+        lat = position.latitude;
+        lon = position.longitude;
     }
     else
     {
@@ -180,4 +182,34 @@ function weatherForecast(data)
     $('#loading').hide();
 
     return markup;
+}
+
+/*
+ Función con la que gestionamos si la localización tuvo algún tipo de error.
+ */
+function locationError (err)
+{
+    debug('No se pudo obtener la posicion. Devolvió un código de error: ' + err.code);
+
+    switch (err.code)
+    {
+        case err.PERMISSION_DENIED:
+            debug('No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
+            ipGeo();
+            break;
+        case err.POSITION_UNAVAILABLE:
+            debug('No se ha podidio acceder a la información de su posición. Se busca por IP.');
+            ipGeo();
+            break;
+        case err.TIMEOUT:
+            debug('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
+            ipGeo();
+            break;
+        default:
+            debug('Error no controlado. Se manda excepción y no mostramos el tiempo.');
+            $('span.location').html('No disponible');
+            $('#app').fadeIn(2000);
+            $('#loading').hide();
+            break;
+    }
 }
