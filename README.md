@@ -16,4 +16,4 @@ Geolocator Javascript Library 1.2.8 by [Onur Yıldırım](https://github.com/onu
 
 ## DEMO
 
-[Demo](http://bweather.herokuapp.com/).
+[Demo](http://burasu.github.io/bweather).
