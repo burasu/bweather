@@ -3,19 +3,19 @@ var BASE_URL = "https://query.yahooapis.com/v1/public/yql?";
 var DEG = 'c';      // c Celsius, f fahrenheit
 
 var weatherIcon = [
-    'tornado', 'tornado', 'tornado', 'lightning', 'lightning', 'snow', 'hail', 'hail',
-    'drizzle', 'drizzle', 'rain', 'rain', 'rain', 'snow', 'snow', 'snow', 'snow',
+    'wi-tornado', 'wi-tornado', 'wi-tornado', 'wi-lightning', 'wi-lightning', 'wi-snow', 'hail', 'hail',
+    'drizzle', 'drizzle', 'rain', 'rain', 'rain', 'wi-snow', 'wi-snow', 'wi-snow', 'wi-snow',
     'hail', 'hail', 'fog', 'fog', 'fog', 'fog', 'wind', 'wind', 'snowflake',
     'cloud', 'cloud moon', 'cloud sun', 'cloud moon', 'cloud sun', 'moon', 'sun',
-    'moon', 'sun', 'hail', 'sun', 'lightning', 'lightning', 'lightning', 'rain',
-    'snowflake', 'snowflake', 'snowflake', 'cloud', 'rain', 'snow', 'lightning'
+    'moon', 'sun', 'hail', 'sun', 'wi-lightning', 'wi-lightning', 'wi-lightning', 'rain',
+    'snowflake', 'wi-snow', 'wi-snow', 'cloud', 'rain', 'wi-snow', 'wi-lightning'
 ];
 
 
 $().ready(function () {
 
     var html5Options = { enableHighAccuracy: true, timeout: 6000, maximumAge: 0 };
-    geolocator.locate(locationSuccess, locationError, true, html5Options, 'map-canvas');
+    geolocator.locate(locationSuccess, locationError, true, html5Options, null);
 
 });
 
@@ -25,32 +25,11 @@ $().ready(function () {
  */
 function locationSuccess(position)
 {
-    console.log(position);
-    var lat;
-    var lon;
-
-    if ( ! position.coords)
-    {
-        console.log('Es un array');
-        lat = position.latitude;
-        lon = position.longitude;
-    }
-    else
-    {
-        console.log('No es un array');
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-    }
-
-    console.log('Hemos obtenido las coordenadas');
-    console.log(lat);
-    console.log(lon);
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
 
     var query = "SELECT * FROM geo.placefinder WHERE text='" + lat + "," + lon + "' AND gflags='R' ";
-    console.log(query);
     query = encodeURIComponent(query);
-
-    console.log(BASE_URL + "q=" + query);
 
     var opciones = {
         url: BASE_URL + "q=" + query,
@@ -72,16 +51,11 @@ function locationSuccess(position)
 function locationCallback(position)
 {
     var data      = position.query.results.Result;
-    var country   = data.country;
     var city      = data.city;
+    var country   = data.country;
     var woeid     = data.woeid;
 
-    var tmp = city + ', ' + country;
-
-    // Localizacion
-    console.log(tmp);
-
-    $('span.location').html(tmp);
+    $('.temp h5').empty().append('<i class="fa fa-map-marker"></i> ' + city + ', ' + country);
 
     getWeather(woeid)
 }
@@ -125,21 +99,27 @@ function weatherCallback(data)
     console.log(weather.item.condition.code);
     console.log(temp);
 
-    var markup = '<i class="climacon ' + weatherIcon[code] + '"></i>';
+    var markup = setWeatherIcon(code);
 
-    var deg;
+    $('#iconW').removeClass().addClass('wi ' + markup + ' weather-icon');
 
+
+    var deg = 'º';
+/*
+    // De momento no discriminamos entre ºC y ºF
     if (DEG == 'c')
     {
-        deg = '<i class="climacon celcius"></i>';
+        deg = 'ºC';
     }
     else
     {
-        deg = '<i class="climacon farenheit"></i>';
+        deg = 'ºF';
     }
+*/
 
+//    $('#today').html(markup);
     $('#clima').append(markup);
-    $('#temperature').append('<i class="climacon thermometer medium-high"></i> ' + temp + ' ' + deg );
+    $('.temp h1').empty().append(temp + ' ' + deg );
 
 
     // Procedemos a tramitar el estilo del forecast. Se descarta el indice 0 ya que es el del tiempo actual.
@@ -157,7 +137,7 @@ function weatherCallback(data)
 function weatherForecast(data)
 {
     var day = data.day;
-    var weather = '<div class="forecast_icon climacon ' + weatherIcon[data.code] + '"></div>';
+    var weather = '<div class="forecast_icon climacon ' + setWeatherIcon(data.code) + '"></div>';
     var min = data.low;
     var max = data.high;
 
@@ -178,8 +158,8 @@ function weatherForecast(data)
     markup += '<div class="forecast_temp"><i class="climacon thermometer medium-high"></i> ' + min + ' / ' + max + deg + '</div>';
     markup += '</li>';
 
-    $('#app').fadeIn(2000);
-    $('#loading').hide();
+    $('section').fadeIn(2000);
+    $('#preloader').hide();
 
     return markup;
 }
@@ -189,27 +169,121 @@ function weatherForecast(data)
  */
 function locationError (err)
 {
-    debug('No se pudo obtener la posicion. Devolvió un código de error: ' + err.code);
 
-    switch (err.code)
-    {
-        case err.PERMISSION_DENIED:
-            debug('No se ha permitido el acceso a la posición del usuario. Se busca por IP.');
-            ipGeo();
+    // Pendiente mostrar mensaje de error.
+    console.log('No se pudo obtener la posicion.');
+
+}
+
+
+/*
+    Función con la que ponemos el icono del tiempo correspondiente.
+ */
+function setWeatherIcon(condid)
+{
+    switch(condid) {
+        case '0': var icon  = 'wi-tornado';
             break;
-        case err.POSITION_UNAVAILABLE:
-            debug('No se ha podidio acceder a la información de su posición. Se busca por IP.');
-            ipGeo();
+        case '1': var icon  = 'wi-storm-showers';
             break;
-        case err.TIMEOUT:
-            debug('DEBUG: El servicio ha tardado demasiado tiempo en responder. Se busca por IP.');
-            ipGeo();
+        case '2': var icon  = 'wi-tornado';
             break;
-        default:
-            debug('Error no controlado. Se manda excepción y no mostramos el tiempo.');
-            $('span.location').html('No disponible');
-            $('#app').fadeIn(2000);
-            $('#loading').hide();
+        case '3': var icon  = 'wi-thunderstorm';
+            break;
+        case '4': var icon  = 'wi-thunderstorm';
+            break;
+        case '5': var icon  = 'wi-snow';
+            break;
+        case '6': var icon  = 'wi-rain-mix';
+            break;
+        case '7': var icon  = 'wi-rain-mix';
+            break;
+        case '8': var icon  = 'wi-sprinkle';
+            break;
+        case '9': var icon  = 'wi-sprinkle';
+            break;
+        case '10': var icon  = 'wi-hail';
+            break;
+        case '11': var icon  = 'wi-showers';
+            break;
+        case '12': var icon  = 'wi-showers';
+            break;
+        case '13': var icon  = 'wi-snow';
+            break;
+        case '14': var icon  = 'wi-storm-showers';
+            break;
+        case '15': var icon  = 'wi-snow';
+            break;
+        case '16': var icon  = 'wi-snow';
+            break;
+        case '17': var icon  = 'wi-hail';
+            break;
+        case '18': var icon  = 'wi-hail';
+            break;
+        case '19': var icon  = 'wi-cloudy-gusts';
+            break;
+        case '20': var icon  = 'wi-fog';
+            break;
+        case '21': var icon  = 'wi-fog';
+            break;
+        case '22': var icon  = 'wi-fog';
+            break;
+        case '23': var icon  = 'wi-cloudy-gusts';
+            break;
+        case '24': var icon  = 'wi-cloudy-windy';
+            break;
+        case '25': var icon  = 'wi-thermometer';
+            break;
+        case '26': var icon  = 'wi-cloudy';
+            break;
+        case '27': var icon  = 'wi-night-cloudy';
+            break;
+        case '28': var icon  = 'wi-day-cloudy';
+            break;
+        case '29': var icon  = 'wi-night-cloudy';
+            break;
+        case '30': var icon  = 'wi-day-cloudy';
+            break;
+        case '31': var icon  = 'wi-night-clear';
+            break;
+        case '32': var icon  = 'wi-day-sunny';
+            break;
+        case '33': var icon  = 'wi-night-clear';
+            break;
+        case '34': var icon  = 'wi-day-sunny-overcast';
+            break;
+        case '35': var icon  = 'wi-hail';
+            break;
+        case '36': var icon  = 'wi-day-sunny';
+            break;
+        case '37': var icon  = 'wi-thunderstorm';
+            break;
+        case '38': var icon  = 'wi-thunderstorm';
+            break;
+        case '39': var icon  = 'wi-thunderstorm';
+            break;
+        case '40': var icon  = 'wi-storm-showers';
+            break;
+        case '41': var icon  = 'wi-snow';
+            break;
+        case '42': var icon  = 'wi-snow';
+            break;
+        case '43': var icon  = 'wi-snow';
+            break;
+        case '44': var icon  = 'wi-cloudy';
+            break;
+        case '45': var icon  = 'wi-lightning';
+            break;
+        case '46': var icon  = 'wi-snow';
+            break;
+        case '47': var icon  = 'wi-thunderstorm';
+            break;
+        case '3200': var icon  =  'wi-cloud';
+            break;
+        default: var icon  =  'wi-cloud';
             break;
     }
+
+    return icon;
+
 }
