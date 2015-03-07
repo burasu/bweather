@@ -184,14 +184,26 @@ strong {
 /************* MEDIA QUERIES **********/
 /***************************************/
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1164px) {
 
     body {
         position: relative;
     }
 
-    .widget-weather .temp h1, .widget-weather .weather-icon {
+    .widget-weather .temp h1 {
         font-size: 280px;
+    }
+
+    .widget-weather .weather-icon {
+        font-size: 180px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+
+
+    .widget-weather .temp h1 {
+        font-size: 250px;
     }
 
     .widget-weather .temp h5 {
@@ -200,7 +212,7 @@ strong {
     }
 
     .widget-weather .weather-icon {
-        font-size: 180px;
+        font-size: 150px;
     }
 
 }

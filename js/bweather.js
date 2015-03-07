@@ -136,7 +136,7 @@ function weatherCallback(data)
         $('#iconW').addClass('night');
     }
 
-    var deg = 'º';
+    var deg = '<i class="wi wi-celsius"></i>';
 /*
     // De momento no discriminamos entre ºC y ºF
     if (DEG == 'c')
@@ -151,7 +151,7 @@ function weatherCallback(data)
 
 //    $('#today').html(markup);
     $('#clima').append(markup);
-    $('.temp h1').empty().append(temp + ' ' + deg );
+    $('.temp h1').empty().append(temp + deg );
 
 
     // Procedemos a tramitar el estilo del forecast. Se descarta el indice 0 ya que es el del tiempo actual.
