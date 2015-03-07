@@ -58,14 +58,14 @@ strong {
     width: 100%;
     height: 100%;
     background-color: #1d2939;
-    z-index: 10000; 
+    z-index: 10000;
 }
 
 #status {
     width: 30px;
     height: 30px;
     position: absolute;
-    left: 50%; 
+    left: 50%;
     top: 50%;
     margin: -15px 0 0 -15px;
     font-size: 32px;
@@ -121,7 +121,7 @@ strong {
 /*********************************/
 
 .widget-weather {
-/*    overflow: hidden;*/
+    /*    overflow: hidden;*/
 }
 
 .widget-weather .panel-body {
@@ -177,15 +177,48 @@ strong {
     padding-top: 10px;
 }
 
+.widget-weather .weather .weather-icon.night {
+    background: #1d2939;
+}
+
 /************* MEDIA QUERIES **********/
 /***************************************/
 
-
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1164px) {
 
     body {
         position: relative;
     }
+
+    .widget-weather .temp h1 {
+        font-size: 280px;
+    }
+
+    .widget-weather .weather-icon {
+        font-size: 180px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+
+
+    .widget-weather .temp h1 {
+        font-size: 250px;
+    }
+
+    .widget-weather .temp h5 {
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+
+    .widget-weather .weather-icon {
+        font-size: 150px;
+    }
+
+}
+
+/* A partir de aqui sería un IPAD */
+@media screen and (max-width: 1024px) {
 
     .mainpanel {
         margin-left: 0;
@@ -194,61 +227,29 @@ strong {
 
 }
 
-@media screen and (max-width: 1050px) {
-    .widget-weather .temp h1, .widget-weather .weather-icon {
-        font-size: 280px;
-    }
-    
-    .widget-weather .temp h5 {
-        font-size: 18px;
-        text-transform: uppercase;
-    }
-    
-    .widget-weather .weather-icon {
-        font-size: 180px;
-    }
-    
-}
+/* Inferior a un iPad, podemos entender que ya es un dispositivo movil */
+@media screen and (max-width: 991px) {
 
-@media screen and (max-width: 850px) {
     .widget-weather .temp h1 {
-        font-size: 200px;
+        font-size: 100px;
     }
-    
+
     .widget-weather .temp h5 {
         font-size: 14px;
         text-transform: uppercase;
-    }    
-    
+    }
+
     .widget-weather .weather-icon {
         font-size: 100px;
     }
 }
 
 @media screen and (max-width: 640px) {
-    .widget-weather .temp h1 {
-        font-size: 170px;
-    }
-    
-    .widget-weather .weather-icon {
-        font-size: 70px;
-    }
+
 }
 
 @media screen and (max-width: 480px) {
-    .widget-weather .temp h1 {
-        font-size: 60px;
-    }
-    
-    .widget-weather .temp h5 {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-    
-    .widget-weather .weather-icon {
-        font-size: 40px;
-        padding: 28px 0
-    }    
+
 }
 
 @media screen and (max-width: 360px) {
@@ -256,6 +257,5 @@ strong {
 }
 
 @media screen and (max-width: 320px) {
-
 
 }
