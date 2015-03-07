@@ -1,16 +1,6 @@
 /** Código en si de la app de tiempo */
 var BASE_URL = "https://query.yahooapis.com/v1/public/yql?";
-var DEG = 'c';      // c Celsius, f fahrenheit
-
-var weatherIcon = [
-    'wi-tornado', 'wi-tornado', 'wi-tornado', 'wi-lightning', 'wi-lightning', 'wi-snow', 'hail', 'hail',
-    'drizzle', 'drizzle', 'rain', 'rain', 'rain', 'wi-snow', 'wi-snow', 'wi-snow', 'wi-snow',
-    'hail', 'hail', 'fog', 'fog', 'fog', 'fog', 'wind', 'wind', 'snowflake',
-    'cloud', 'cloud moon', 'cloud sun', 'cloud moon', 'cloud sun', 'moon', 'sun',
-    'moon', 'sun', 'hail', 'sun', 'wi-lightning', 'wi-lightning', 'wi-lightning', 'rain',
-    'snowflake', 'wi-snow', 'wi-snow', 'cloud', 'rain', 'wi-snow', 'wi-lightning'
-];
-
+var DEG = 'C';      // c Celsius, f fahrenheit
 
 $().ready(function () {
 
@@ -89,11 +79,22 @@ function getWeather(woeid)
 function weatherCallback(data)
 {
     var weather = data.query.results.channel;
-    var sunrise = weather.astronomy.sunrise;
-    var sunset  = weather.astronomy.sunset;
-    var temp    = weather.item.condition.temp;
-    var code    = weather.item.condition.code;
-    var unit    = weather.units.temperature;
+
+    console.log(weather);
+
+    var sunrise     = weather.astronomy.sunrise;
+    var sunset      = weather.astronomy.sunset;
+
+    var humidity    = weather.atmosphere.humidity;
+
+    var temp        = weather.item.condition.temp;
+    var code        = weather.item.condition.code;
+
+    var temperature = weather.units.temperature;
+    var speed       = weather.units.speed;
+
+    var wind        = weather.wind.speed;
+    var direction   = weather.wind.direction;
 
     // definimos la variable que nos da la fecha y hora actual del sistema.
     var dNow     = new Date();
@@ -137,21 +138,31 @@ function weatherCallback(data)
     }
 
     var deg = '<i class="wi wi-celsius"></i>';
-/*
-    // De momento no discriminamos entre ºC y ºF
-    if (DEG == 'c')
+
+    // De momento se obtiene la medida dada por el json y no hacemos conversiones.
+    DEG = temperature;
+    if (DEG == 'C')
     {
-        deg = 'ºC';
+        deg = '<i class="wi wi-celsius"></i>';
     }
     else
     {
-        deg = 'ºF';
+        deg = '<i class="wi wi-fahrenheit"></i>';
     }
-*/
 
-//    $('#today').html(markup);
+
     $('#clima').append(markup);
     $('.temp h1').empty().append(temp + deg );
+
+    // A continuación insertamos la humedad para el dia de hoy.
+    humidity = parseFloat(humidity).toFixed(0); // Redondeamos a 0 decimales.
+    $('.weather .fa-tint').after(' ' + humidity + '%');
+
+    // En este punto pintamos la velocidad del viento, su medida y la dirección.
+    wind = parseFloat(wind).toFixed(0); // Redondeamos a 0 decimales.
+    var compass = getCompass(direction);
+    console.log(compass);
+    $('.weather .wi-strong-wind').after(' ' + wind + speed + ' ' + compass);
 
 
     // Procedemos a tramitar el estilo del forecast. Se descarta el indice 0 ya que es el del tiempo actual.
@@ -318,4 +329,77 @@ function setWeatherIcon(condid)
 
     return icon;
 
+}
+
+/*
+    Función que devuleve la dirección del viento
+ */
+function getCompass(direction)
+{
+    var rotation = 360 - parseFloat(direction);
+    var compass = parseFloat(rotation / 15).toFixed(0);
+
+    console.log(compass);
+
+    switch(compass) {
+        // N
+        case '0': var icon  = '_0-deg';
+            break;
+        case '1': var icon  = '_15-deg';
+            break;
+        case '2': var icon  = '_30_deg';
+            break;
+        case '3': var icon  = '_45_deg';
+            break;
+        case '4': var icon  = '_60-deg';
+            break;
+        case '5': var icon  = '_75-deg';
+            break;
+        // O
+        case '6': var icon  = '_90-deg';
+            break;
+        case '7': var icon  = '_105-deg';
+            break;
+        case '8': var icon  = '_120-deg';
+            break;
+        case '9': var icon  = '_135-deg';
+            break;
+        case '10': var icon  = '_150-deg';
+            break;
+        case '11': var icon  = '_165-deg';
+            break;
+        // S
+        case '12': var icon  = '_180-deg';
+            break;
+        case '13': var icon  = '_195-deg';
+            break;
+        case '14': var icon  = '_210-deg';
+            break;
+        case '15': var icon  = '_225-deg';
+            break;
+        case '16': var icon  = '_240-deg';
+            break;
+        case '17': var icon  = '_255-deg';
+            break;
+        // E
+        case '18': var icon  = '_270-deg';
+            break;
+        case '19': var icon  = '_285-deg';
+            break;
+        case '20': var icon  = '_300-deg';
+            break;
+        case '21': var icon  = '_315-deg';
+            break;
+        case '22': var icon  = '_330-deg';
+            break;
+        case '23': var icon  = '_345-deg';
+            break;
+        // Empty
+        default: var icon  =  '';
+            break;
+    }
+
+    var icon_wind = '<i class="wi wi-wind-default ' + icon + '"></li>';
+
+    return icon_wind;
 }

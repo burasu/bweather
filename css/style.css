@@ -72,6 +72,10 @@ strong {
     color: #fff;
 }
 
+.mainpanel {
+    overflow: hidden;
+}
+
 /************* HEADER PANEL **********/
 /*************************************/
 
@@ -173,8 +177,8 @@ strong {
     width: 50%;
     text-align: center;
     color: #fff;
-    font-size: 14px;
-    padding-top: 10px;
+    font-size: 30px;
+    padding-top: 25px;
 }
 
 .widget-weather .weather .weather-icon.night {
@@ -220,11 +224,6 @@ strong {
 /* A partir de aqui sería un IPAD */
 @media screen and (max-width: 1024px) {
 
-    .mainpanel {
-        margin-left: 0;
-        width: 100%;
-    }
-
 }
 
 /* Inferior a un iPad, podemos entender que ya es un dispositivo movil */
@@ -249,6 +248,11 @@ strong {
 }
 
 @media screen and (max-width: 480px) {
+
+    .widget-weather .weather > div {
+        font-size: 18px;
+        padding-top: 15px;
+    }
 
 }
 
