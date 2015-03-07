@@ -88,21 +88,53 @@ function getWeather(woeid)
  */
 function weatherCallback(data)
 {
-    console.log(data);
-
     var weather = data.query.results.channel;
-    var temp  = weather.item.condition.temp;
-    var code  = weather.item.condition.code;
-    var unit  = weather.units.temperature;
+    var sunrise = weather.astronomy.sunrise;
+    var sunset  = weather.astronomy.sunset;
+    var temp    = weather.item.condition.temp;
+    var code    = weather.item.condition.code;
+    var unit    = weather.units.temperature;
 
-    console.log(weather);
-    console.log(weather.item.condition.code);
-    console.log(temp);
+    // definimos la variable que nos da la fecha y hora actual del sistema.
+    var dNow     = new Date();
+    var dSunrise = new Date();
+    var dSunset  = new Date();
+
+    var hSunrise = sunrise.split(':')[0];
+    var mSunrise = sunrise.split(':')[1].split(' ')[0];
+
+    var hSunset  = parseInt(sunset.split(':')[0]) + 12;
+    var mSunset  = sunset.split(':')[1].split(' ')[0];
+
+    dSunrise.setHours(hSunrise);
+    dSunrise.setMinutes(mSunrise);
+
+    dSunset.setHours(hSunset);
+    dSunset.setMinutes(mSunset);
+
+    dNow = dNow.getTime();
+    dSunrise = dSunrise.getTime();
+    dSunset  = dSunset.getTime();
 
     var markup = setWeatherIcon(code);
 
     $('#iconW').removeClass().addClass('wi ' + markup + ' weather-icon');
 
+    if (dNow >= dSunrise)
+    {
+        if (dNow >= dSunset)
+        {
+            $('#iconW').addClass('night');
+        }
+        else
+        {
+            $('#iconW').removeClass('night');
+        }
+    }
+    else
+    {
+        $('#iconW').addClass('night');
+    }
 
     var deg = 'º';
 /*
