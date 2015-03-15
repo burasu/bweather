@@ -117,25 +117,37 @@ function weatherCallback(data)
     dSunrise = dSunrise.getTime();
     dSunset  = dSunset.getTime();
 
-    var markup = setWeatherIcon(code);
+    console.log(dSunrise);
+    console.log(dNow);
+    console.log(dSunset);
 
-    $('#iconW').removeClass().addClass('wi ' + markup + ' weather-icon');
+    var isNight = false;
 
     if (dNow >= dSunrise)
     {
         if (dNow >= dSunset)
         {
-            $('#iconW').addClass('night');
+            isNight = true;
         }
-        else
-        {
-            $('#iconW').removeClass('night');
-        }
+    }
+    else
+    {
+        isNight = true;
+    }
+
+    if (isNight == true)
+    {
+        $('#iconW').removeClass('night');
     }
     else
     {
         $('#iconW').addClass('night');
     }
+
+    var markup = setWeatherIcon(code);
+
+    $('#iconW').removeClass().addClass('wi ' + markup + ' weather-icon');
+
 
     var deg = '<i class="wi wi-celsius"></i>';
 
